@@ -16,6 +16,33 @@ const ProductService = {
     } catch (error) {
       throw error;
     }
+  },
+
+  getAllProducts: async (offset, limit) => {
+    try {
+      const products = await ProductModel.getAllProducts(offset, limit);
+      return products;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getProductsByDescription: async (description) => {
+    try {
+      const products = await ProductModel.getProductsByDescription(description);
+      return products;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getProductsByFilters: async (code, providerId) => {
+    try {
+      const products = await ProductModel.getProductsByFilters(code, providerId);
+      return products;
+    } catch (error) {
+      throw error;
+    }
   }
 };
 

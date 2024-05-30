@@ -58,7 +58,54 @@ const ProductModel = {
       }
       throw error;
     }
-  },   
+  },
+    getAllProducts: async (offset, limit) => {
+        try {
+          const [rows] = await connection.promise().query(
+            'SELECT * FROM products LIMIT ? OFFSET ?',
+            [limit, offset]
+          );
+          return rows;
+        } catch (error) {
+          throw error;
+        }
+      },
+    
+      getProductsByDescription: async (description) => {
+        try {
+          const [rows] = await connection.promise().query(
+            'SELECT * FROM products WHERE description LIKE ?',
+            [`%${description}%`]
+          );
+          return rows;
+        } catch (error) {
+          throw error;
+        }
+      },
+    
+      getProductsByFilters: async (code, providerId) => {
+        try {
+          const query = [];
+          const params = [];
+    
+          if (code) {
+            query.push('code = ?');
+            params.push(code);
+          }
+          if (providerId) {
+            query.push('provider_id = ?');
+            params.push(providerId);
+          }
+    
+          const whereClause = query.length ? 'WHERE ' + query.join(' AND ') : '';
+          const sql = `SELECT * FROM products ${whereClause}`;
+    
+          const [rows] = await connection.promise().query(sql, params);
+          return rows;
+        } catch (error) {
+          throw error;
+        }
+      }   
 };
 
 module.exports = ProductModel;

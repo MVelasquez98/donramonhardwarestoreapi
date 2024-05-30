@@ -19,6 +19,37 @@ const ProductController = {
     } catch (error) {
       res.status(500).json({ error: 'Error al crear productos en lote: ' + error.message });
     }
+  },
+
+  getAllProducts: async (req, res) => {
+    try {
+      const offset = parseInt(req.query.offset) || 0;
+      const limit = parseInt(req.query.limit) || 1000;
+      const products = await ProductService.getAllProducts(offset, limit);
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener los productos: ' + error.message });
+    }
+  },
+
+  getProductsByDescription: async (req, res) => {
+    try {
+      const description = req.query.description;
+      const products = await ProductService.getProductsByDescription(description);
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener los productos: ' + error.message });
+    }
+  },
+
+  getProductsByFilters: async (req, res) => {
+    try {
+      const { code, providerId } = req.query;
+      const products = await ProductService.getProductsByFilters(code, providerId);
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener los productos: ' + error.message });
+    }
   }
 };
 
