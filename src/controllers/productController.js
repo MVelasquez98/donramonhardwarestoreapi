@@ -10,6 +10,16 @@ const ProductController = {
         res.status(500).json({ error: 'Error al crear el producto: ' + error.message });
     }
   },
+
+  createProductsInBatch: async (req, res) => {
+    try {
+      const { providerId, productsData } = req.body;
+      const result = await ProductService.createProductsInBatch(providerId, productsData);
+      res.status(201).json({ message: result });
+    } catch (error) {
+      res.status(500).json({ error: 'Error al crear productos en lote: ' + error.message });
+    }
+  }
 };
 
 module.exports = ProductController;
