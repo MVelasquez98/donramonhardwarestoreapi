@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const connection = require('./data/dbConfig.js');
 const productRoutes = require('./routes/productRoutes');
+const providerRoutes = require('./routes/providerRoutes');
 const port = 3000;
 
 connection.connect(err => {
@@ -17,7 +18,9 @@ connection.connect(err => {
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/products', productRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/providers', providerRoutes);
+
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
