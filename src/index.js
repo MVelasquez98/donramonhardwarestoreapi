@@ -5,6 +5,7 @@ const app = express();
 const connection = require('./data/dbConfig.js');
 const productRoutes = require('./routes/productRoutes');
 const providerRoutes = require('./routes/providerRoutes');
+const swaggerSetup = require('./swagger.js');
 const port = 3000;
 
 connection.connect(err => {
@@ -20,6 +21,8 @@ app.use(bodyParser.json());
 
 app.use('/api/products', productRoutes);
 app.use('/api/providers', providerRoutes);
+
+swaggerSetup(app);
 
 
 app.listen(port, () => {
