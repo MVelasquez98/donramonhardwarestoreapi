@@ -71,11 +71,11 @@ const ProductModel = {
         }
       },
     
-      getProductsByDescription: async (description) => {
+      getProductsByDescriptionOrCode: async (searchTerm) => {
         try {
           const [rows] = await connection.promise().query(
-            'SELECT * FROM products WHERE description LIKE ?',
-            [`%${description}%`]
+            'SELECT * FROM products WHERE description LIKE ? OR code LIKE ?',
+            [`%${searchTerm}%`, `%${searchTerm}%`]
           );
           return rows;
         } catch (error) {

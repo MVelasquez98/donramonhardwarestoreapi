@@ -32,10 +32,10 @@ const ProductController = {
     }
   },
 
-  getProductsByDescription: async (req, res) => {
+  getProductsByDescriptionOrCode: async (req, res) => {
     try {
-      const description = req.query.description;
-      const products = await ProductService.getProductsByDescription(description);
+      const searchTerm = req.query.term;
+      const products = await ProductService.getProductsByDescriptionOrCode(searchTerm);
       res.status(200).json(products);
     } catch (error) {
       res.status(500).json({ error: 'Error al obtener los productos: ' + error.message });

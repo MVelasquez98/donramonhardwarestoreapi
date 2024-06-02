@@ -131,13 +131,13 @@ router.get('/', ProductController.getAllProducts);
  * @swagger
  * /products/search:
  *   get:
- *     summary: Search products by description
+ *     summary: Search products by description or code
  *     parameters:
  *       - in: query
- *         name: description
+ *         name: term
  *         schema:
  *           type: string
- *         description: Description to search for
+ *         description: Term to search for in description or code
  *     responses:
  *       200:
  *         description: List of matching products
@@ -164,7 +164,7 @@ router.get('/', ProductController.getAllProducts);
  *                     type: string
  *                     format: date-time
  */
-router.get('/search', ProductController.getProductsByDescription);
+router.get('/search', ProductController.getProductsByDescriptionOrCode);
 
 /**
  * @swagger
