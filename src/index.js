@@ -2,17 +2,18 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-const connection = require('./data/dbConfig.js');
+const pool = require('./data/dbConfig.js');
 const productRoutes = require('./routes/productRoutes');
 const providerRoutes = require('./routes/providerRoutes');
 const swaggerSetup = require('./swagger.js');
 const port = 3000;
 
-connection.connect(err => {
+pool.getConnection((err, connection) => {
   if (err) {
     console.error('Error al conectar a la base de datos:', err);
   } else {
     console.log('Conexión exitosa a la base de datos');
+    connection.release();
   }
 });
 

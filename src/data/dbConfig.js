@@ -16,6 +16,6 @@ const dbConfig = {
 //   port:3306
 // };
 
-const pool = mysql.createConnection(dbConfig);
+const pool = mysql.createPool(dbConfig);
 
 module.exports = pool;
