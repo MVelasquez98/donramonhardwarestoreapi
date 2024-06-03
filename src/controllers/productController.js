@@ -14,6 +14,11 @@ const ProductController = {
   createProductsInBatch: async (req, res) => {
     try {
       const { providerId, productsData } = req.body;
+
+      if (!providerId || !productsData || !Array.isArray(productsData) || productsData.length === 0) {
+        return res.status(400).json({ error: 'providerId y productsData son requeridos y deben ser un array no vacío.' });
+      }
+
       const result = await ProductService.createProductsInBatch(providerId, productsData);
       res.status(201).json({ message: result });
     } catch (error) {
@@ -34,8 +39,10 @@ const ProductController = {
 
   getProductsByDescriptionOrCode: async (req, res) => {
     try {
-      const searchTerm = req.query.term;
-      const products = await ProductService.getProductsByDescriptionOrCode(searchTerm);
+      const searchTerm = req.query.term || '';
+      const limit = parseInt(req.query.limit) || 25;
+      const offset = parseInt(req.query.offset) || 0;
+      const products = await ProductService.getProductsByDescriptionOrCode(searchTerm, limit, offset);
       res.status(200).json(products);
     } catch (error) {
       res.status(500).json({ error: 'Error al obtener los productos: ' + error.message });

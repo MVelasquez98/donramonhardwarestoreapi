@@ -58,11 +58,15 @@ router.post('/', ProductController.createProduct);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - providerId
+ *               - productsData
  *             properties:
  *               providerId:
  *                 type: integer
  *               productsData:
  *                 type: array
+ *                 minItems: 1
  *                 items:
  *                   type: object
  *                   properties:
@@ -73,6 +77,15 @@ router.post('/', ProductController.createProduct);
  *                     price:
  *                       type: number
  *                       format: float
+ *             example:
+ *               providerId: 123
+ *               productsData:
+ *                 - code: ABC123
+ *                   description: Product 1
+ *                   price: 10.99
+ *                 - code: XYZ456
+ *                   description: Product 2
+ *                   price: 20.99
  *     responses:
  *       200:
  *         description: Batch insertion completed successfully
@@ -80,6 +93,8 @@ router.post('/', ProductController.createProduct);
  *           application/json:
  *             schema:
  *               type: string
+ *       400:
+ *         description: Bad request, check request body for errors
  */
 router.post('/create-in-batch', ProductController.createProductsInBatch);
 
@@ -129,15 +144,25 @@ router.get('/', ProductController.getAllProducts);
 
 /**
  * @swagger
- * /products/search:
+ * /api/products/search:
  *   get:
- *     summary: Search products by description or code
+ *     summary: Search products by description or code, or provider name
  *     parameters:
  *       - in: query
  *         name: term
  *         schema:
  *           type: string
- *         description: Term to search for in description or code
+ *         description: Search term for description, code, or provider name
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Limit for pagination
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *         description: Offset for pagination
  *     responses:
  *       200:
  *         description: List of matching products
@@ -148,8 +173,6 @@ router.get('/', ProductController.getAllProducts);
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
- *                     type: integer
  *                   code:
  *                     type: string
  *                   description:
@@ -157,12 +180,14 @@ router.get('/', ProductController.getAllProducts);
  *                   price:
  *                     type: number
  *                     format: float
- *                   createdAt:
+ *                   created_at:
  *                     type: string
  *                     format: date-time
- *                   updatedAt:
+ *                   updated_at:
  *                     type: string
  *                     format: date-time
+ *                   provider_name:
+ *                     type: string
  */
 router.get('/search', ProductController.getProductsByDescriptionOrCode);
 

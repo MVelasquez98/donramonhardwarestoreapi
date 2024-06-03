@@ -71,12 +71,35 @@ const ProductModel = {
         }
       },
     
-      getProductsByDescriptionOrCode: async (searchTerm) => {
+      getProductsByDescriptionOrCode: async (searchTerm = '', limit = 25, offset = 0) => {
         try {
-          const [rows] = await connection.promise().query(
-            'SELECT * FROM products WHERE description LIKE ? OR code LIKE ?',
-            [`%${searchTerm}%`, `%${searchTerm}%`]
-          );
+          let query = `
+            SELECT 
+              p.code, 
+              p.description, 
+              p.price, 
+              p.created_at, 
+              p.updated_at,
+              pr.name AS provider_name
+            FROM products p
+            JOIN providers pr ON p.provider_id = pr.id
+          `;
+    
+          const params = [limit, offset];
+          
+          if (searchTerm) {
+            query += ` 
+              WHERE 
+                p.description LIKE ? 
+                OR p.code LIKE ?
+                OR pr.name LIKE ?
+            `;
+            params.unshift(`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`);
+          }
+    
+          query += ` LIMIT ? OFFSET ?`;
+    
+          const [rows] = await connection.promise().query(query, params);
           return rows;
         } catch (error) {
           throw error;

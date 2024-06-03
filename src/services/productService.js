@@ -27,9 +27,9 @@ const ProductService = {
     }
   },
 
-  getProductsByDescriptionOrCode: async (searchTerm) => {
+  getProductsByDescriptionOrCode: async (searchTerm, limit, offset) => {
     try {
-      const products = await ProductModel.getProductsByDescriptionOrCode(searchTerm);
+      const products = await ProductModel.getProductsByDescriptionOrCode(searchTerm, limit, offset);
       return products;
     } catch (error) {
       throw error;
